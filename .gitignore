@@ -1,0 +1,8 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# VS Code IDE
+.vscode/
+
+# Unit test
+.pytest_cache/
