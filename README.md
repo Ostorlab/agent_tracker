@@ -9,5 +9,5 @@
 
 
 * git fetch template
-* git checkout <branch-to-merge-to>
+* git checkout [branch-to-merge-to]
 * git merge template/main
