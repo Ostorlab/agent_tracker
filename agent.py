@@ -1,8 +1,9 @@
-"""Sample agent implementation"""
+"""Tracker Agent : Agent responsible for tracking a scan, e.g., status, data queues."""
+
 import ostorlab
 
-class HellWorldAgent(ostorlab.Agent):
-    """Hello world agent."""
+class TrackerAgent(ostorlab.Agent):
+    """Agent responsible for tracking a scan."""
 
     def process(self, message: ostorlab.Message) -> None:
         """TODO (author): add your description here.
