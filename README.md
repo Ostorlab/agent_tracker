@@ -8,6 +8,6 @@
 **In case new changes are made to the template**
 
 
-* git fetch template <branch-to-merge-to>
+* git fetch template
 * git checkout <branch-to-merge-to>
 * git merge template/main
