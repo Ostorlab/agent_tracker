@@ -1,6 +1,6 @@
 # Template to create agents.
 
-#How to :
+## How to :
 * Create a repository from base_agent template.
 * git remote add template https://github.com/Ostorlab/base_agent.git
 
