@@ -56,29 +56,29 @@ class TrackerAgent(agent.Agent):
                 return
             sleep(SLEEP_SEC)
 
+
     def kill_universe(self):
         print('Killing the universe.')
 
+
     def start(self) -> None:
-        
+
         self.periodic_checks()
-        #print('First check : done')
-        
+
         #self.emit('v2.report.event.scan_agent', {'scan_id': 1, 'source': '7', 'correlation_id': '42'})
         self.emit('v3.healthcheck.ping', {'body': 'Hello World!'})
-        #print('Emission done ')
-        
+
         self.periodic_checks()
-        #print('Second checK done')
+
         self.kill_universe()
-        
+
 
 
 """Next parts are only for testing purposes. will be removed later."""
 from ostorlab.runtimes import definitions
 agent_def = definitions.AgentDefinition(
     name='AgentName',
-    out_selectors=['v3.healthcheck.ping', 'v2.report.event.scan_agent']
+    out_selectors=['v3.healthcheck.ping']  #, 'v2.report.event.scan_agent']
 )
 agent_settings= definitions.AgentInstanceSettings(
     bus_url='amqp://guest:guest@localhost:55672/',
