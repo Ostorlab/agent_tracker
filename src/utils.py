@@ -7,7 +7,6 @@ import requests
 import json
 import logging
 from typing import Dict, Optional
-import pika  #To be removed later
 
 
 logger = logging.getLogger(__name__)
@@ -62,17 +61,4 @@ def get_universe_id() -> str:
     try:
         return os.environ['UNIVERSE_ID']
     except KeyError:
-        logger.error('The %s variable does not exist in the current environment.', )
-
-#This method will be removed later
-def get_rabbitmq_channel():
-    credentials = pika.PlainCredentials('guest', 'guest')
-    parameters = pika.ConnectionParameters('localhost',
-                                    55672,
-                                    '/',
-                                    credentials)
-    connection = pika.BlockingConnection(parameters)
-    channel = connection.channel()
-
-    channel.queue_declare(queue='testQ', durable=True)
-    return channel
+        logger.error('The UNIVERSE_ID variable does not exist in the current environment.')
