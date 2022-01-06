@@ -10,7 +10,7 @@ import abc
 from typing import List
 import pytest
 
-import agent as agent_tracker
+from src import agent as agent_tracker
 from ostorlab.agent import definitions as agent_definitions
 from ostorlab.runtimes import definitions as runtime_definitions
 
