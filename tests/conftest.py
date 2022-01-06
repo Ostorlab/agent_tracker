@@ -6,5 +6,29 @@
     - https://docs.pytest.org/en/stable/fixture.html
     - https://docs.pytest.org/en/stable/writing_plugins.html
 """
+import abc
+from typing import List
+import pytest
 
-# import pytest
+import agent as agent_tracker
+from ostorlab.agent import definitions as agent_definitions
+from ostorlab.runtimes import definitions as runtime_definitions
+
+@pytest.fixture(scope='function')
+def tracker_agent():
+    """Instantiate a tracker agent."""
+    definition = agent_definitions.AgentDefinition(
+        name='agent_tracker',
+        out_selectors=[
+            'v3.report.event.scan.done',
+            'v3.report.event.scan.timeout',
+            'v3.report.event.post_scan.timeout',
+            'v3.report.event.post_scan.done'
+            ])
+    settings = runtime_definitions.AgentSettings(
+        key='agent_tracker_key',
+        bus_url='NA',
+        bus_exchange_topic='NA')
+
+    tracker_agent = agent_tracker.TrackerAgent(definition, settings)
+    return tracker_agent
