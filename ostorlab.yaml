@@ -1,13 +1,13 @@
 kind: Agent
-name: tracker_agent # Agent name, must be unique by organisation to be published on the store.
+name: tracker_agent
 version: 0.0.1
-description: Agent responsible for tracking a scan. # Support for Markdown format.
-in_selectors: # List of input selectors.
+description: Agent responsible for tracking a scan.
+in_selectors:
   - v3.healthcheck.ping
-out_selectors: # List of output selectors.
+out_selectors:
   - v3.report.event.scan.done
   - v3.report.event.scan.timeout
   - v3.report.event.post_scan.done
   - v3.report.event.post_scan.timeout
-docker_file_path : Dockerfile # Dockerfile path for automated release build.
-docker_build_root : . # Docker build dir for automated release build.
+docker_file_path : Dockerfile
+docker_build_root : .
