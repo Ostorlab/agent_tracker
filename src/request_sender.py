@@ -10,10 +10,6 @@ from typing import Dict, Optional
 
 logger = logging.getLogger(__name__)
 
-USERNAME = 'guest'
-PASSWORD = 'guest'
-HOST = 'localhost'
-PORT = '15672'
 
 class AuthenticationError(Exception):
     """Authentication Error."""
