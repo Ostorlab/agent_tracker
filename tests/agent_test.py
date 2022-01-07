@@ -71,7 +71,6 @@ def testTimeoutQueuesChecking_whenQueuesStartEmptyAndGetMsgs_send3Messages(mocke
     mocker.patch.object(agent_tracker, 'SCAN_DONE_TIMEOUT_SEC', 0.05)
     mocker.patch.object(agent_tracker, 'POSTSCANE_DONE_TIMEOUT_SEC', 0.05)
 
-
     try:
         tracker_agent.timeout_queues_checking(0.1)
     except TimeoutError:
@@ -88,8 +87,3 @@ def testTimeoutQueuesChecking_whenQueuesStartEmptyAndGetMsgs_send3Messages(mocke
     assert agent_mock[0].selector == 'v3.report.event.scan.done'
     assert agent_mock[1].selector == 'v3.report.event.post_scan.timeout'
     assert agent_mock[2].selector == 'v3.report.event.post_scan.done'
-
-
-
-
-    
