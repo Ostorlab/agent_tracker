@@ -12,8 +12,8 @@ import agent as agent_tracker
 from ostorlab.agent import definitions as agent_definitions
 from ostorlab.runtimes import definitions as runtime_definitions
 
-@pytest.fixture(scope='function')
-def tracker_agent():
+@pytest.fixture(scope='function', name='tracker_agent')
+def fixture_tracker_agent():
     """Instantiate a tracker agent."""
     definition = agent_definitions.AgentDefinition(
         name='agent_tracker',
@@ -28,5 +28,5 @@ def tracker_agent():
         bus_url='NA',
         bus_exchange_topic='NA')
 
-    tracker_agent = agent_tracker.TrackerAgent(definition, settings)
-    return tracker_agent
+    agent = agent_tracker.TrackerAgent(definition, settings)
+    return agent
