@@ -4,7 +4,7 @@
 import pytest
 import time
 
-from ostorlab.agent.testing.mock_agent import agent_mock
+from ostorlab.agent.testing.mock_agent import agent_mock # pylint: disable=W0611
 
 import agent as agent_tracker
 import data_queues
@@ -34,7 +34,7 @@ def testTrackerAgentCheckQueueNotEmpty_whenQueueIsEmpty_returnFalse():
     assert data_queues.is_queue_not_empty(dummy_queue) is False
 
 @pytest.mark.asyncio
-def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(mocker, agent_mock, tracker_agent):
+def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(mocker, agent_mock, tracker_agent): # pylint: disable=W0621
     mocker.patch('data_queues.are_queues_empty', return_value=False)
     mocker.patch('universe.kill_universe', return_value=None)
     mocker.patch.object(agent_tracker, 'SCAN_DONE_TIMEOUT_SEC', 0.05)
@@ -53,7 +53,7 @@ def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(mo
     assert agent_mock[3].selector == 'v3.report.event.post_scan.done'
 
 @pytest.mark.asyncio
-def testTrackerLogic_whenQueuesAreEmpty_send2messages(mocker, agent_mock, tracker_agent):
+def testTrackerLogic_whenQueuesAreEmpty_send2messages(mocker, agent_mock, tracker_agent): # pylint: disable=W0621
     mocker.patch('data_queues.are_queues_empty', return_value=True)
     mocker.patch('universe.kill_universe', return_value=None)
     mocker.patch('time.sleep', side_effect=time.sleep(0.01))
@@ -65,7 +65,7 @@ def testTrackerLogic_whenQueuesAreEmpty_send2messages(mocker, agent_mock, tracke
     assert agent_mock[1].selector == 'v3.report.event.post_scan.done'
 
 @pytest.mark.asyncio
-def testTimeoutQueuesChecking_whenQueuesStartEmptyAndGetMsgs_send3Messages(mocker, agent_mock, tracker_agent):
+def testTimeoutQueuesChecking_whenQueuesStartEmptyAndGetMsgs_send3Messages(mocker, agent_mock, tracker_agent): # pylint: disable=W0621
     mocker.patch('data_queues.are_queues_empty', return_value=True)
     mocker.patch('time.sleep', side_effect=time.sleep(0.01))
     mocker.patch.object(agent_tracker, 'SCAN_DONE_TIMEOUT_SEC', 0.05)
