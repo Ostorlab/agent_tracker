@@ -2,6 +2,7 @@
 (TODO) Still needs tests.
 """
 import pytest
+import time
 
 from ostorlab.agent.testing.mock_agent import agent_mock
 
@@ -52,12 +53,43 @@ def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(mo
     assert agent_mock[3].selector == 'v3.report.event.post_scan.done'
 
 @pytest.mark.asyncio
-def testCheckingProcessWithTimeout_whenQueuesAreEmpty_send2messages(mocker, agent_mock, tracker_agent):
+def testTrackerLogic_whenQueuesAreEmpty_send2messages(mocker, agent_mock, tracker_agent):
     mocker.patch('data_queues.are_queues_empty', return_value=True)
     mocker.patch('universe.kill_universe', return_value=None)
+    mocker.patch('time.sleep', side_effect=time.sleep(0.01))
 
     tracker_agent.run()
 
     assert len(agent_mock) == 2
     assert agent_mock[0].selector == 'v3.report.event.scan.done'
     assert agent_mock[1].selector == 'v3.report.event.post_scan.done'
+
+@pytest.mark.asyncio
+def testTimeoutQueuesChecking_whenQueuesStartEmptyAndGetMsgs_send3Messages(mocker, agent_mock, tracker_agent):
+    mocker.patch('data_queues.are_queues_empty', return_value=True)
+    mocker.patch('time.sleep', side_effect=time.sleep(0.01))
+    mocker.patch.object(agent_tracker, 'SCAN_DONE_TIMEOUT_SEC', 0.05)
+    mocker.patch.object(agent_tracker, 'POSTSCANE_DONE_TIMEOUT_SEC', 0.05)
+
+
+    try:
+        tracker_agent.timeout_queues_checking(0.1)
+    except TimeoutError:
+        tracker_agent.emit('v3.report.event.scan.timeout', {})
+    tracker_agent.emit('v3.report.event.scan.done', {})
+    mocker.patch('data_queues.are_queues_empty', return_value=False)
+    try:
+        tracker_agent.timeout_queues_checking(0.1)
+    except TimeoutError:
+        tracker_agent.emit('v3.report.event.post_scan.timeout', {})
+    tracker_agent.emit('v3.report.event.post_scan.done', {})
+
+    assert len(agent_mock) == 3
+    assert agent_mock[0].selector == 'v3.report.event.scan.done'
+    assert agent_mock[1].selector == 'v3.report.event.post_scan.timeout'
+    assert agent_mock[2].selector == 'v3.report.event.post_scan.done'
+
+
+
+
+    
