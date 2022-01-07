@@ -3,8 +3,8 @@ import multiprocessing
 import logging
 
 from ostorlab.agent import agent
-import data_queues
-import universe
+from src import data_queues
+from src import universe
 
 
 logger = logging.getLogger(__name__)
