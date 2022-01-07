@@ -42,6 +42,13 @@ def are_queues_empty(path:str) -> bool:
             return False
     return True
 
+def confirm_queues_are_empty(path):
+    for _ in range(5):
+        time.sleep(1)
+        if not are_queues_empty(path):
+            return False
+    return True
+
 
 def check_queues_periodically(path: str) -> None:
     """Periodically check the data queues, Only return if they are all empty.
@@ -50,3 +57,8 @@ def check_queues_periodically(path: str) -> None:
     """
     while not are_queues_empty(path):
         time.sleep(SLEEP_SEC)
+
+    if confirm_queues_are_empty(path):
+        return
+    else:
+        check_queues_periodically(path)
