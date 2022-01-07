@@ -6,8 +6,8 @@ import time
 
 from ostorlab.agent.testing.mock_agent import agent_mock # pylint: disable=W0611
 
-import agent as agent_tracker
-import data_queues
+import src.agent as agent_tracker
+from src import data_queues
 
 def testTrackerAgentCheckQueueNotEmpty_whenQueueIsNotEmpty_returnTrue():
     dummy_queue = {

@@ -8,7 +8,7 @@
 """
 import pytest
 
-import agent as agent_tracker
+import src.agent as agent_tracker
 from ostorlab.agent import definitions as agent_definitions
 from ostorlab.runtimes import definitions as runtime_definitions
 
