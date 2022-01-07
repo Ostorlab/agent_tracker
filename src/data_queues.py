@@ -3,7 +3,7 @@ from typing import Dict, List, Optional
 import time
 from urllib import parse
 
-import request_sender
+from src import request_sender
 
 SLEEP_SEC = 3
 
