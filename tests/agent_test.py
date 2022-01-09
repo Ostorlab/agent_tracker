@@ -1,7 +1,6 @@
 """Tests for the tracker agent."""
 import pytest
 
-from ostorlab.agent.testing.mock_agent import agent_mock # pylint: disable=W0611
 from src import data_queues
 
 def testTrackerAgentCheckQueueNotEmpty_whenQueueIsNotEmpty_returnTrue():
@@ -33,7 +32,7 @@ def testTrackerAgentCheckQueueNotEmpty_whenQueueIsEmpty_returnFalse():
 @pytest.mark.asyncio
 def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
         mocker,
-        agent_mock, # pylint: disable=W0621
+        agent_mock,
         tracker_agent,
         requests_mock):
     """Test for the life cycle of the agent tracker.
@@ -67,7 +66,7 @@ def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
 @pytest.mark.asyncio
 def testTrackerLogic_whenQueuesAreEmpty_send2messages(
         mocker,
-        agent_mock, # pylint: disable=W0621
+        agent_mock,
         tracker_agent,
         requests_mock):
     """Test for the life cycle of the agent tracker.
@@ -96,7 +95,7 @@ def testTrackerLogic_whenQueuesAreEmpty_send2messages(
 @pytest.mark.asyncio
 def testTimeoutQueuesChecking_whenQueuesStartEmptyAndGetMsgs_send3Messages(
         mocker,
-        agent_mock, # pylint: disable=W0621
+        agent_mock,
         tracker_agent,
         requests_mock):
     """Test for the life cycle of the agent tracker.
