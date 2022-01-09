@@ -3,17 +3,27 @@ import multiprocessing
 import logging
 
 from ostorlab.agent import agent
+from ostorlab.agent import definitions as agent_definitions
+from ostorlab.runtimes import definitions as runtime_definitions
 from src import data_queues
 from src import universe
 
 
 logger = logging.getLogger(__name__)
-SCAN_DONE_TIMEOUT_SEC = 10
-POSTSCANE_DONE_TIMEOUT_SEC = 10
-
 
 class TrackerAgent(agent.Agent):
     """Agent responsible for tracking a scan."""
+
+    def __init__(self,
+                agent_definition: agent_definitions.AgentDefinition,
+                agent_instance_definition: runtime_definitions.AgentSettings,
+                scan_done_timeout_sec: int,
+                postscane_done_timeout_sec: int
+                ) -> None:
+        """Inits the tracker agent."""
+        super().__init__(agent_definition, agent_instance_definition)
+        self.scan_done_timeout_sec = scan_done_timeout_sec
+        self.postscane_done_timeout_sec = postscane_done_timeout_sec
 
     def start(self) -> None:
         """Overriden method start responsible for :
@@ -27,14 +37,14 @@ class TrackerAgent(agent.Agent):
         """
 
         try:
-            self.timeout_queues_checking(SCAN_DONE_TIMEOUT_SEC)
+            self.timeout_queues_checking(self.scan_done_timeout_sec)
         except TimeoutError:
             self.emit('v3.report.event.scan.timeout', {})
 
         self.emit('v3.report.event.scan.done', {})
 
         try:
-            self.timeout_queues_checking(POSTSCANE_DONE_TIMEOUT_SEC)
+            self.timeout_queues_checking(self.postscane_done_timeout_sec)
         except TimeoutError:
             self.emit('v3.report.event.post_scan.timeout', {})
 
@@ -51,11 +61,14 @@ class TrackerAgent(agent.Agent):
         Raises:
             TimeoutError: In case the process exceeded the time limit
         """
-        check_scan_process = multiprocessing.Process(target=data_queues.check_queues_periodically, args=(self.bus_url,))
+        check_scan_process = multiprocessing.Process(
+            target=data_queues.check_queues_periodically,
+            args=(self.bus_managment_url, self.bus_vhost)
+        )
         check_scan_process.start()
         check_scan_process.join(timeout)
 
         if check_scan_process.is_alive():
             check_scan_process.kill()
             check_scan_process.join()
-            raise TimeoutError
+            raise TimeoutError()
