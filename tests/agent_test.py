@@ -1,15 +1,11 @@
-"""Tests for the tracker agent.
-(TODO) Still needs tests.
-"""
+"""Tests for the tracker agent."""
 import pytest
-import time
 
 from ostorlab.agent.testing.mock_agent import agent_mock # pylint: disable=W0611
-
-import src.agent as agent_tracker
 from src import data_queues
 
 def testTrackerAgentCheckQueueNotEmpty_whenQueueIsNotEmpty_returnTrue():
+    """Test for the method responsible for checking if a data queue is empty. """
     dummy_queue = {
         'auto_delete': False,
         'message_bytes_ready': 34,
@@ -22,6 +18,7 @@ def testTrackerAgentCheckQueueNotEmpty_whenQueueIsNotEmpty_returnTrue():
     assert data_queues.is_queue_not_empty(dummy_queue) is True
 
 def testTrackerAgentCheckQueueNotEmpty_whenQueueIsEmpty_returnFalse():
+    """Test for the method responsible for checking if a data queue is empty. """
     dummy_queue = {
         'auto_delete': False,
         'message_bytes_ready': 34,
@@ -34,18 +31,29 @@ def testTrackerAgentCheckQueueNotEmpty_whenQueueIsEmpty_returnFalse():
     assert data_queues.is_queue_not_empty(dummy_queue) is False
 
 @pytest.mark.asyncio
-def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(mocker, agent_mock, tracker_agent): # pylint: disable=W0621
-    mocker.patch('data_queues.are_queues_empty', return_value=False)
-    mocker.patch('universe.kill_universe', return_value=None)
-    mocker.patch.object(agent_tracker, 'SCAN_DONE_TIMEOUT_SEC', 0.05)
-    mocker.patch.object(agent_tracker, 'POSTSCANE_DONE_TIMEOUT_SEC', 0.05)
+def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(mocker, agent_mock, tracker_agent, requests_mock): # pylint: disable=W0621
+    """Test for the life cycle of the agent tracker.
+    Case : The data queues start full.
+    The agent should keep checking if the scan is done,
+    then time-out, emits a message : scan_done_timeout
+    emits another message : scan_done.
+    Checks again if the data queues are empty (they are still full).
+    So, it should timeout, emits a message : post_scan_done_timeout,
+    and another message : post_scan_done.
+    """
+    path = 'http://guest:guest@localhost:15672/api/queues/%2F'
+    requests_mock.get(
+        path,
+        json=[
+            {'messages': 42, 'messages_unacknowledged':0},
+            {'messages': 0, 'messages_unacknowledged':0}
+        ]
+    )
+    mocker.patch('agent.universe.kill_universe', return_value=None)
     mocker.patch.object(data_queues, 'SLEEP_SEC', 0.01)
 
     tracker_agent.run()
 
-    # Should timeout twice, for scan done & post scan done.
-    # Data queue from agent_mock fixture should have 4 messages:
-    #Scan timeout, scan done, post scan timeout, & post scan done.
     assert len(agent_mock) == 4
     assert agent_mock[0].selector == 'v3.report.event.scan.timeout'
     assert agent_mock[1].selector == 'v3.report.event.scan.done'
@@ -53,10 +61,22 @@ def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(mo
     assert agent_mock[3].selector == 'v3.report.event.post_scan.done'
 
 @pytest.mark.asyncio
-def testTrackerLogic_whenQueuesAreEmpty_send2messages(mocker, agent_mock, tracker_agent): # pylint: disable=W0621
-    mocker.patch('data_queues.are_queues_empty', return_value=True)
-    mocker.patch('universe.kill_universe', return_value=None)
-    mocker.patch('time.sleep', side_effect=time.sleep(0.01))
+def testTrackerLogic_whenQueuesAreEmpty_send2messages(mocker, agent_mock, tracker_agent, requests_mock):
+    """Test for the life cycle of the agent tracker.
+    Case : The data queues start empty.
+    The agent should automatically emit a message : scan_done.
+    Checks again if the data queues are empty(they are empty).
+    So, it should automatically emit a message : post_scan_done.
+    """
+    mocker.patch('agent.universe.kill_universe', return_value=None)
+    path = 'http://guest:guest@localhost:15672/api/queues/%2F'
+    requests_mock.get(
+        path,
+        json=[
+            {'messages': 0, 'messages_unacknowledged':0},
+            {'messages': 0, 'messages_unacknowledged':0}
+        ]
+    )
 
     tracker_agent.run()
 
@@ -64,19 +84,38 @@ def testTrackerLogic_whenQueuesAreEmpty_send2messages(mocker, agent_mock, tracke
     assert agent_mock[0].selector == 'v3.report.event.scan.done'
     assert agent_mock[1].selector == 'v3.report.event.post_scan.done'
 
+
 @pytest.mark.asyncio
-def testTimeoutQueuesChecking_whenQueuesStartEmptyAndGetMsgs_send3Messages(mocker, agent_mock, tracker_agent): # pylint: disable=W0621
-    mocker.patch('data_queues.are_queues_empty', return_value=True)
-    mocker.patch('time.sleep', side_effect=time.sleep(0.01))
-    mocker.patch.object(agent_tracker, 'SCAN_DONE_TIMEOUT_SEC', 0.05)
-    mocker.patch.object(agent_tracker, 'POSTSCANE_DONE_TIMEOUT_SEC', 0.05)
+def testTimeoutQueuesChecking_whenQueuesStartEmptyAndGetMsgs_send3Messages(mocker, agent_mock, tracker_agent, requests_mock): # pylint: disable=W0621
+    """Test for the life cycle of the agent tracker.
+    Case : The data queues start empty.
+    The agent should automatically emit a message : scan_done.
+    The queues will become full and the agent should check again.
+    It should timeout, emits a message : post_scan_done_timeout,
+    and another message : post_scan_done.
+    """
+    mocker.patch.object(data_queues, 'SLEEP_SEC', 0.01)
+    path = 'http://guest:guest@localhost:15672/api/queues/%2F'
+    requests_mock.get(
+        path,
+        json=[
+            {'messages': 0, 'messages_unacknowledged':0},
+            {'messages': 0, 'messages_unacknowledged':0}
+        ]
+    )
 
     try:
         tracker_agent.timeout_queues_checking(0.1)
     except TimeoutError:
         tracker_agent.emit('v3.report.event.scan.timeout', {})
     tracker_agent.emit('v3.report.event.scan.done', {})
-    mocker.patch('data_queues.are_queues_empty', return_value=False)
+    requests_mock.get(
+        path,
+        json=[
+            {'messages': 42, 'messages_unacknowledged':0},
+            {'messages': 0, 'messages_unacknowledged':0}
+        ]
+    )
     try:
         tracker_agent.timeout_queues_checking(0.1)
     except TimeoutError:
