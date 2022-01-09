@@ -1,13 +1,5 @@
-# Template to create agents.
+# Tracker Agent.
 
-## How to :
-* Create a repository from base_agent template.
-* git remote add template https://github.com/Ostorlab/base_agent.git
+##  Agent responsible for tracking a scan e.g., status, data queues..
 
-
-**In case new changes are made to the template**
-
-
-* git fetch template
-* git checkout [branch-to-merge-to]
-* git merge template/main
+* (ToDo)
