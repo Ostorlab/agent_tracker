@@ -13,7 +13,7 @@ def kill_universe(universe_id: str) -> None:
         try:
             service_env_variables = s.attrs['Spec']['TaskTemplate']['ContainerSpec']['Env']
             for variable in service_env_variables:
-                if 'UNIVERSE_ID' in variable and variable.split('=')[-1]==universe_id:
+                if 'UNIVERSE' in variable and variable.split('=')[-1]==universe_id:
                     s.remove()
         except KeyError:
-            logger.error('The environement variables do not exist.')
+            logger.error('The environement variable : UNIVERSE does not exist.')
