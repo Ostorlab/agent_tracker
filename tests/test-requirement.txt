@@ -1,0 +1,7 @@
+pylint
+pylint-quotes
+pytest
+pytest-cov
+requests-mock
+pytest-mock
+pytest-asyncio
