@@ -1,7 +1,4 @@
-"""Utils for the tracker agent.
-Provides helping constants & methods like rabbitMQ credentials, URL,
-and sending requests for the rabbitMQ management API.
-"""
+"""Module responsible for sending HTTP requests"""
 import requests
 import json
 import logging
