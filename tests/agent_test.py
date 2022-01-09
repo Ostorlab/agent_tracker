@@ -33,9 +33,9 @@ def testTrackerAgentCheckQueueNotEmpty_whenQueueIsEmpty_returnFalse():
 @pytest.mark.asyncio
 def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
         mocker,
-        agent_mock,
+        agent_mock, # pylint: disable=W0621
         tracker_agent,
-        requests_mock): # pylint: disable=W0621
+        requests_mock):
     """Test for the life cycle of the agent tracker.
     Case : The data queues start full.
     The agent should keep checking if the scan is done,
@@ -67,9 +67,9 @@ def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
 @pytest.mark.asyncio
 def testTrackerLogic_whenQueuesAreEmpty_send2messages(
         mocker,
-        agent_mock,
+        agent_mock, # pylint: disable=W0621
         tracker_agent,
-        requests_mock): # pylint: disable=W0621
+        requests_mock):
     """Test for the life cycle of the agent tracker.
     Case : The data queues start empty.
     The agent should automatically emit a message : scan_done.
@@ -96,9 +96,9 @@ def testTrackerLogic_whenQueuesAreEmpty_send2messages(
 @pytest.mark.asyncio
 def testTimeoutQueuesChecking_whenQueuesStartEmptyAndGetMsgs_send3Messages(
         mocker,
-        agent_mock,
+        agent_mock, # pylint: disable=W0621
         tracker_agent,
-        requests_mock): # pylint: disable=W0621
+        requests_mock):
     """Test for the life cycle of the agent tracker.
     Case : The data queues start empty.
     The agent should automatically emit a message : scan_done.
