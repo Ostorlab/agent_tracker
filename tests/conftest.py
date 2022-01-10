@@ -5,8 +5,8 @@ from ostorlab.runtimes import definitions as runtime_definitions
 
 import src.agent as agent_tracker
 
-SCAN_DONE_TIMEOUT_SEC = 1
-POSTSCAN_DONE_TIMEOUT_SEC = 1
+SCAN_DONE_TIMEOUT_SEC = 2
+POSTSCAN_DONE_TIMEOUT_SEC = 2
 
 
 @pytest.fixture(scope='function', name='tracker_agent')
