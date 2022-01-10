@@ -1,7 +1,7 @@
 """Pytest fixture for the tracker agent."""
 import pytest
 
-from src import agent as agent_tracker
+import agent as agent_tracker
 from ostorlab.agent import definitions as agent_definitions
 from ostorlab.runtimes import definitions as runtime_definitions
 
