@@ -1,25 +1,26 @@
 """Tracker Agent : Agent responsible for tracking a scan, e.g., status, data queues."""
-import multiprocessing
 import logging
+import multiprocessing
 
 from ostorlab.agent import agent
 from ostorlab.agent import definitions as agent_definitions
 from ostorlab.runtimes import definitions as runtime_definitions
-from src import data_queues
-from src import universe
 
+import data_queues
+import universe
 
 logger = logging.getLogger(__name__)
+
 
 class TrackerAgent(agent.Agent):
     """Agent responsible for tracking a scan."""
 
     def __init__(self,
-                agent_definition: agent_definitions.AgentDefinition,
-                agent_instance_definition: runtime_definitions.AgentSettings,
-                scan_done_timeout_sec: int,
-                postscane_done_timeout_sec: int
-                ) -> None:
+                 agent_definition: agent_definitions.AgentDefinition,
+                 agent_instance_definition: runtime_definitions.AgentSettings,
+                 scan_done_timeout_sec: int,
+                 postscane_done_timeout_sec: int
+                 ) -> None:
         """Inits the tracker agent."""
         super().__init__(agent_definition, agent_instance_definition)
         self.scan_done_timeout_sec = scan_done_timeout_sec

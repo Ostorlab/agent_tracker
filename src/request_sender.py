@@ -1,15 +1,16 @@
 """Module responsible for sending HTTP requests"""
-import requests
 import json
 import logging
 from typing import Dict, Optional
 
+import requests
 
 logger = logging.getLogger(__name__)
 
 
 class AuthenticationError(Exception):
     """Authentication Error."""
+
 
 def make_request(method: str, path: str, data: Optional[Dict[str, str]] = None):
     """Sends an HTTP request.

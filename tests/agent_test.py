@@ -1,7 +1,6 @@
 """Tests for the tracker agent."""
 import pytest
 
-from ostorlab.agent.testing.mock_agent import agent_mock # pylint: disable=W0611
 from src import data_queues
 
 def testTrackerAgentCheckQueueNotEmpty_whenQueueIsNotEmpty_returnTrue():
