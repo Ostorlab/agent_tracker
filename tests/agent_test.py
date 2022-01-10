@@ -35,7 +35,7 @@ def testTrackerAgentCheckQueueNotEmpty_whenQueueIsEmpty_returnFalse():
 @pytest.mark.asyncio
 def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
         mocker,
-        agent_mock,  # pylint: disable=W0621
+        agent_mock,
         tracker_agent,
         requests_mock):
     """Test for the life cycle of the agent tracker.
@@ -70,7 +70,7 @@ def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
 @pytest.mark.asyncio
 def testTrackerLogic_whenQueuesAreEmpty_send2messages(
         mocker,
-        agent_mock,  # pylint: disable=W0621
+        agent_mock,
         tracker_agent,
         requests_mock):
     """Test for the life cycle of the agent tracker.
@@ -99,10 +99,10 @@ def testTrackerLogic_whenQueuesAreEmpty_send2messages(
 @pytest.mark.asyncio
 def testTimeoutQueuesChecking_whenQueuesStartEmptyAndGetMsgs_send3Messages(
         mocker,
-        agent_mock,  # pylint: disable=W0621
+        agent_mock,
         tracker_agent,
         requests_mock):
-    """Test for the life cycle of the agent tracker.
+    """Test for the lifecycle of the agent tracker.
     Case : The data queues start empty.
     The agent should automatically emit a message : scan_done.
     The queues will become full and the agent should check again.
@@ -120,7 +120,7 @@ def testTimeoutQueuesChecking_whenQueuesStartEmptyAndGetMsgs_send3Messages(
     )
 
     try:
-        tracker_agent.timeout_queues_checking(0.1)
+        tracker_agent.timeout_queues_checking(1)
     except TimeoutError:
         tracker_agent.emit('v3.report.event.scan.timeout', {})
     tracker_agent.emit('v3.report.event.scan.done', {})
@@ -132,7 +132,7 @@ def testTimeoutQueuesChecking_whenQueuesStartEmptyAndGetMsgs_send3Messages(
         ]
     )
     try:
-        tracker_agent.timeout_queues_checking(0.1)
+        tracker_agent.timeout_queues_checking(1)
     except TimeoutError:
         tracker_agent.emit('v3.report.event.post_scan.timeout', {})
     tracker_agent.emit('v3.report.event.post_scan.done', {})
