@@ -3,6 +3,7 @@ import pytest
 
 from src import data_queues
 
+
 def testTrackerAgentCheckQueueNotEmpty_whenQueueIsNotEmpty_returnTrue():
     """Test for the method responsible for checking if a data queue is empty. """
     dummy_queue = {
@@ -15,6 +16,7 @@ def testTrackerAgentCheckQueueNotEmpty_whenQueueIsNotEmpty_returnTrue():
     }
 
     assert data_queues.is_queue_not_empty(dummy_queue) is True
+
 
 def testTrackerAgentCheckQueueNotEmpty_whenQueueIsEmpty_returnFalse():
     """Test for the method responsible for checking if a data queue is empty. """
@@ -29,10 +31,11 @@ def testTrackerAgentCheckQueueNotEmpty_whenQueueIsEmpty_returnFalse():
 
     assert data_queues.is_queue_not_empty(dummy_queue) is False
 
+
 @pytest.mark.asyncio
 def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
         mocker,
-        agent_mock, # pylint: disable=W0621
+        agent_mock,  # pylint: disable=W0621
         tracker_agent,
         requests_mock):
     """Test for the life cycle of the agent tracker.
@@ -48,8 +51,8 @@ def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
     requests_mock.get(
         path,
         json=[
-            {'messages': 42, 'messages_unacknowledged':0},
-            {'messages': 0, 'messages_unacknowledged':0}
+            {'messages': 42, 'messages_unacknowledged': 0},
+            {'messages': 0, 'messages_unacknowledged': 0}
         ]
     )
     mocker.patch('src.agent.universe.kill_universe', return_value=None)
@@ -63,10 +66,11 @@ def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
     assert agent_mock[2].selector == 'v3.report.event.post_scan.timeout'
     assert agent_mock[3].selector == 'v3.report.event.post_scan.done'
 
+
 @pytest.mark.asyncio
 def testTrackerLogic_whenQueuesAreEmpty_send2messages(
         mocker,
-        agent_mock, # pylint: disable=W0621
+        agent_mock,  # pylint: disable=W0621
         tracker_agent,
         requests_mock):
     """Test for the life cycle of the agent tracker.
@@ -80,8 +84,8 @@ def testTrackerLogic_whenQueuesAreEmpty_send2messages(
     requests_mock.get(
         path,
         json=[
-            {'messages': 0, 'messages_unacknowledged':0},
-            {'messages': 0, 'messages_unacknowledged':0}
+            {'messages': 0, 'messages_unacknowledged': 0},
+            {'messages': 0, 'messages_unacknowledged': 0}
         ]
     )
 
@@ -95,7 +99,7 @@ def testTrackerLogic_whenQueuesAreEmpty_send2messages(
 @pytest.mark.asyncio
 def testTimeoutQueuesChecking_whenQueuesStartEmptyAndGetMsgs_send3Messages(
         mocker,
-        agent_mock, # pylint: disable=W0621
+        agent_mock,  # pylint: disable=W0621
         tracker_agent,
         requests_mock):
     """Test for the life cycle of the agent tracker.
@@ -110,8 +114,8 @@ def testTimeoutQueuesChecking_whenQueuesStartEmptyAndGetMsgs_send3Messages(
     requests_mock.get(
         path,
         json=[
-            {'messages': 0, 'messages_unacknowledged':0},
-            {'messages': 0, 'messages_unacknowledged':0}
+            {'messages': 0, 'messages_unacknowledged': 0},
+            {'messages': 0, 'messages_unacknowledged': 0}
         ]
     )
 
@@ -123,8 +127,8 @@ def testTimeoutQueuesChecking_whenQueuesStartEmptyAndGetMsgs_send3Messages(
     requests_mock.get(
         path,
         json=[
-            {'messages': 42, 'messages_unacknowledged':0},
-            {'messages': 0, 'messages_unacknowledged':0}
+            {'messages': 42, 'messages_unacknowledged': 0},
+            {'messages': 0, 'messages_unacknowledged': 0}
         ]
     )
     try:
