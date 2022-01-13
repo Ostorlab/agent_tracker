@@ -1,12 +1,13 @@
 """Module responsible for handling the data queues, listing them & checking their states."""
-from typing import Dict, List, Optional
 import time
+from typing import Dict, List, Optional
 from urllib import parse
 
-from src import request_sender
+from . import request_sender
 
 SLEEP_SEC = 3
 MAX_COUNT = 5
+
 
 def list_all_queues(path: str, vhost: Optional[str] = '/') -> List[Dict]:
     """Send a request to RabbitMQ api to list all the data queues.
@@ -18,8 +19,9 @@ def list_all_queues(path: str, vhost: Optional[str] = '/') -> List[Dict]:
     """
     quoted_vhost = parse.quote_plus(vhost)
     queues_path = path + f'/api/queues/{quoted_vhost}'
-    queues =  request_sender.make_request('GET', queues_path)
+    queues = request_sender.make_request('GET', queues_path)
     return queues
+
 
 def is_queue_not_empty(queue: str) -> bool:
     """Check if a data queue is not empty.
@@ -28,9 +30,10 @@ def is_queue_not_empty(queue: str) -> bool:
     Returns:
         False if queue is empty, else True.
     """
-    return queue['messages']  > 0 or queue['messages_unacknowledged'] > 0
+    return queue['messages'] > 0 or queue['messages_unacknowledged'] > 0
 
-def are_queues_empty(path:str, vhost:str) -> bool:
+
+def are_queues_empty(path: str, vhost: str) -> bool:
     """Check if at least one data queue is not empty.
     Args:
         path: Path to the RabbitMQ management api to send the request to.
@@ -42,6 +45,7 @@ def are_queues_empty(path:str, vhost:str) -> bool:
         if is_queue_not_empty(queue):
             return False
     return True
+
 
 def confirm_queues_are_empty(path: str, vhost: str, max_count: int) -> bool:
     """Confirms that the queues are empty.
@@ -56,10 +60,11 @@ def confirm_queues_are_empty(path: str, vhost: str, max_count: int) -> bool:
     """
     counter = 0
     while counter < max_count:
-        counter+=1
+        counter += 1
         if not are_queues_empty(path, vhost):
             return False
     return True
+
 
 def check_queues_periodically(path: str, vhost: str) -> None:
     """Periodically check the data queues, Only return if they are all empty.
