@@ -1,7 +1,7 @@
 """Tests for the tracker agent."""
 import pytest
 
-from src import data_queues
+from agent import data_queues
 
 
 def testTrackerAgentCheckQueueNotEmpty_whenQueueIsNotEmpty_returnTrue():
