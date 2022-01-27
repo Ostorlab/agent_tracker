@@ -1,7 +1,7 @@
 """Tests for the tracker agent."""
 import pytest
 
-from src import data_queues
+from agent import data_queues
 
 
 def testTrackerAgentCheckQueueNotEmpty_whenQueueIsNotEmpty_returnTrue():
@@ -55,7 +55,7 @@ def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
             {'messages': 0, 'messages_unacknowledged': 0}
         ]
     )
-    mocker.patch('src.agent.universe.kill_universe', return_value=None)
+    mocker.patch('agent.agent.universe.kill_universe', return_value=None)
     mocker.patch.object(data_queues, 'SLEEP_SEC', 0.01)
 
     tracker_agent.run()
@@ -79,7 +79,7 @@ def testTrackerLogic_whenQueuesAreEmpty_send2messages(
     Checks again if the data queues are empty(they are empty).
     So, it should automatically emit a message : post_scan_done.
     """
-    mocker.patch('src.agent.universe.kill_universe', return_value=None)
+    mocker.patch('agent.agent.universe.kill_universe', return_value=None)
     path = 'http://guest:guest@localhost:15672/api/queues/%2F'
     requests_mock.get(
         path,

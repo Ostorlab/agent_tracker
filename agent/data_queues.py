@@ -3,7 +3,7 @@ import time
 from typing import Dict, List, Optional
 from urllib import parse
 
-from . import request_sender
+from agent import request_sender
 
 SLEEP_SEC = 3
 MAX_COUNT = 5

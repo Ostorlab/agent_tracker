@@ -6,8 +6,8 @@ from ostorlab.agent import agent
 from ostorlab.agent import definitions as agent_definitions
 from ostorlab.runtimes import definitions as runtime_definitions
 
-from . import data_queues
-from . import universe
+from agent import data_queues
+from agent import universe
 
 logger = logging.getLogger(__name__)
 
