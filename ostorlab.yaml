@@ -1,5 +1,5 @@
 kind: Agent
-name: tracker_agent
+name: tracker
 version: 0.0.1
 description: Agent responsible for tracking a scan.
 in_selectors:
@@ -13,10 +13,10 @@ args:
   - name: "scan_done_timeout_sec"
     type: "number"
     description: "time to wait before terminating the scan."
-    value: 60 * 60 * 4  # 4 hours
+    value: 14400  # 4 hours
   - name: "postscane_done_timeout_sec"
     type: "number"
     description: "time to wait before terminating the post process scan."
-    value: 60 * 10  # 10 minutes
+    value: 600 # 10 minutes
 docker_file_path : Dockerfile
 docker_build_root : .
