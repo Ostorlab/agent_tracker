@@ -3,7 +3,7 @@ import pytest
 from ostorlab.agent import definitions as agent_definitions
 from ostorlab.runtimes import definitions as runtime_definitions
 
-from agent import agent as agent_tracker
+from agent import tracker_agent as agent_tracker
 
 SCAN_DONE_TIMEOUT_SEC = 1
 POSTSCAN_DONE_TIMEOUT_SEC = 1
