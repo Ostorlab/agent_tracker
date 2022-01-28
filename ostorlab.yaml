@@ -9,5 +9,14 @@ out_selectors:
   - v3.report.event.scan.timeout
   - v3.report.event.post_scan.done
   - v3.report.event.post_scan.timeout
+args:
+  - name: "scan_done_timeout_sec"
+    type: "number"
+    description: "time to wait before terminating the scan."
+    value: 60 * 60 * 4  # 4 hours
+  - name: "postscane_done_timeout_sec"
+    type: "number"
+    description: "time to wait before terminating the post process scan."
+    value: 60 * 10  # 10 minutes
 docker_file_path : Dockerfile
 docker_build_root : .

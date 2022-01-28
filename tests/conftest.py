@@ -19,6 +19,20 @@ def fixture_tracker_agent():
             'v3.report.event.scan.timeout',
             'v3.report.event.post_scan.timeout',
             'v3.report.event.post_scan.done'
+        ],
+        args=[
+            {
+                'name': 'scan_done_timeout_sec',
+                'type': 'number',
+                'value': SCAN_DONE_TIMEOUT_SEC,
+                'description': 'blabla'
+            },
+            {
+                'name': 'postscane_done_timeout_sec',
+                'type': 'number',
+                'value': POSTSCAN_DONE_TIMEOUT_SEC,
+                'description': 'blabla'
+            }
         ])
     settings = runtime_definitions.AgentSettings(
         key='agent_tracker_key',
@@ -28,5 +42,5 @@ def fixture_tracker_agent():
         bus_vhost='/',
     )
 
-    agent = agent_tracker.TrackerAgent(definition, settings, SCAN_DONE_TIMEOUT_SEC, POSTSCAN_DONE_TIMEOUT_SEC)
+    agent = agent_tracker.TrackerAgent(definition, settings)
     return agent
