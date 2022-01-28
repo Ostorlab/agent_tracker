@@ -10,4 +10,5 @@ RUN mkdir -p /app/agent
 COPY agent /app/agent
 COPY ostorlab.yaml /app/agent/ostorlab.yaml
 WORKDIR /app
-CMD ["python3", "/app/agent/agent.py"]
+ENV PYTHONPATH=/app
+CMD ["python3", "/app/agent/tracker_agent.py"]

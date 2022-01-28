@@ -17,14 +17,12 @@ class TrackerAgent(agent.Agent):
 
     def __init__(self,
                  agent_definition: agent_definitions.AgentDefinition,
-                 agent_instance_definition: runtime_definitions.AgentSettings,
-                 scan_done_timeout_sec: int,
-                 postscane_done_timeout_sec: int
+                 agent_settings: runtime_definitions.AgentSettings
                  ) -> None:
         """Inits the tracker agent."""
-        super().__init__(agent_definition, agent_instance_definition)
-        self.scan_done_timeout_sec = scan_done_timeout_sec
-        self.postscane_done_timeout_sec = postscane_done_timeout_sec
+        super().__init__(agent_definition, agent_settings)
+        self.scan_done_timeout_sec = self.args.get('scan_done_timeout_sec')
+        self.postscane_done_timeout_sec = self.args.get('postscane_done_timeout_sec')
 
     def start(self) -> None:
         """Overriden method start responsible for :
@@ -73,3 +71,7 @@ class TrackerAgent(agent.Agent):
             check_scan_process.kill()
             check_scan_process.join()
             raise TimeoutError()
+
+if __name__ == '__main__':
+    logger.debug('Tracker agent starting..')
+    TrackerAgent.main()
