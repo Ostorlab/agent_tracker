@@ -12,9 +12,9 @@ def kill_universe(universe_id: str) -> None:
     services = client.services.list()
     for s in services:
         try:
-            service_env_variables = s.attrs['Spec']['TaskTemplate']['ContainerSpec']['Env']
-            for variable in service_env_variables:
-                if 'UNIVERSE' in variable and variable.split('=')[-1] == universe_id:
-                    s.remove()
+            service_env_variables = s.attrs['Spec']['Labels']
+            if 'ostorlab.universe' in service_env_variables and\
+                    service_env_variables['ostorlab.universe'] == universe_id:
+                s.remove()
         except KeyError:
             logger.error('The environement variable : OSTORLAB.UNIVERSE does not exist.')
