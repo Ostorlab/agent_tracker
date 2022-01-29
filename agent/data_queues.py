@@ -18,7 +18,7 @@ def list_all_queues(path: str, vhost: Optional[str] = '/') -> List[Dict]:
         List of all the data queues.
     """
     quoted_vhost = parse.quote_plus(vhost)
-    queues_path = path + f'/api/queues/{quoted_vhost}'
+    queues_path = path + f'api/queues/{quoted_vhost}'
     queues = request_sender.make_request('GET', queues_path)
     return queues
 

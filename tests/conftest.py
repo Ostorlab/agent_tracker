@@ -22,6 +22,12 @@ def fixture_tracker_agent():
         ],
         args=[
             {
+                'name': 'init_sleep_seconds',
+                'type': 'number',
+                'value': SCAN_DONE_TIMEOUT_SEC,
+                'description': 'blabla'
+            },
+            {
                 'name': 'scan_done_timeout_sec',
                 'type': 'number',
                 'value': SCAN_DONE_TIMEOUT_SEC,
@@ -38,7 +44,7 @@ def fixture_tracker_agent():
         key='agent_tracker_key',
         bus_url='NA',
         bus_exchange_topic='NA',
-        bus_managment_url='http://guest:guest@localhost:15672',
+        bus_managment_url='http://guest:guest@localhost:15672/',
         bus_vhost='/',
     )
 
