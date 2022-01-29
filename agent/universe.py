@@ -10,11 +10,22 @@ def kill_universe(universe_id: str) -> None:
     """remove a service belonging to universe with universe_id."""
     client = docker.from_env()
     services = client.services.list()
+    logger.info('Stopping the scan services')
     for s in services:
-        try:
-            service_env_variables = s.attrs['Spec']['Labels']
-            if 'ostorlab.universe' in service_env_variables and\
-                    service_env_variables['ostorlab.universe'] == universe_id:
-                s.remove()
-        except KeyError:
-            logger.error('The environement variable : OSTORLAB.UNIVERSE does not exist.')
+        service_env_variables = s.attrs['Spec']['Labels']
+        if service_env_variables.get('ostorlab.universe') == universe_id:
+            s.remove()
+
+    logger.info('Stopping the scan network')
+    networks = client.networks.list()
+    for network in networks:
+        network_labels = network.attrs['Labels']
+        if network_labels.get('ostorlab.universe') == universe_id:
+            network.remove()
+
+    logger.info('Stopping the scan configs')
+    configs = client.configs.list()
+    for config in configs:
+        config_labels = config.attrs['Spec']['Labels']
+        if config_labels.get('ostorlab.universe') == universe_id:
+            config.remove()
