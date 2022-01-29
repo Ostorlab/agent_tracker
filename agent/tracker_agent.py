@@ -1,6 +1,7 @@
 """Tracker Agent : Agent responsible for tracking a scan, e.g., status, data queues."""
 import logging
 import multiprocessing
+import time
 
 from ostorlab.agent import agent
 from ostorlab.agent import definitions as agent_definitions
@@ -21,6 +22,7 @@ class TrackerAgent(agent.Agent):
                  ) -> None:
         """Inits the tracker agent."""
         super().__init__(agent_definition, agent_settings)
+        self.init_sleep_seconds = self.args.get('init_sleep_seconds')
         self.scan_done_timeout_sec = self.args.get('scan_done_timeout_sec')
         self.postscane_done_timeout_sec = self.args.get('postscane_done_timeout_sec')
 
@@ -36,6 +38,7 @@ class TrackerAgent(agent.Agent):
         """
 
         try:
+            time.sleep(self.init_sleep_seconds)
             self.timeout_queues_checking(self.scan_done_timeout_sec)
         except TimeoutError:
             self.emit('v3.report.event.scan.timeout', {})
@@ -71,6 +74,7 @@ class TrackerAgent(agent.Agent):
             check_scan_process.kill()
             check_scan_process.join()
             raise TimeoutError()
+
 
 if __name__ == '__main__':
     logger.debug('Tracker agent starting..')
