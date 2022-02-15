@@ -1,7 +1,10 @@
 """Pytest fixture for the tracker agent."""
 import pytest
+import os
+
 from ostorlab.agent import definitions as agent_definitions
 from ostorlab.runtimes import definitions as runtime_definitions
+from ostorlab.runtimes.local.models import models
 
 from agent import tracker_agent as agent_tracker
 
@@ -47,6 +50,9 @@ def fixture_tracker_agent():
         bus_management_url='http://guest:guest@localhost:15672/',
         bus_vhost='/',
     )
-
+    database = models.Database()
+    database.create_db_tables()
+    scan = models.Scan.create('test')
+    os.environ['UNIVERSE'] = str(scan.id)
     agent = agent_tracker.TrackerAgent(definition, settings)
     return agent
