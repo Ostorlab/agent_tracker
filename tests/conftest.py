@@ -1,6 +1,7 @@
 """Pytest fixture for the tracker agent."""
 import pytest
 import os
+from unittest import mock
 
 from ostorlab.agent import definitions as agent_definitions
 from ostorlab.runtimes import definitions as runtime_definitions
@@ -13,6 +14,7 @@ POSTSCAN_DONE_TIMEOUT_SEC = 1
 
 
 @pytest.fixture(scope='function', name='tracker_agent')
+@mock.patch('ostorlab.runtimes.local.models.models.ENGINE_URL', 'sqlite:////tmp/ostorlab_db1.sqlite')
 def fixture_tracker_agent():
     """Instantiate a tracker agent."""
     definition = agent_definitions.AgentDefinition(

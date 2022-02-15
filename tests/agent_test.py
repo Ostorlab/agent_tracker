@@ -1,6 +1,7 @@
 """Tests for the tracker agent."""
 import pytest
 import os
+from unittest import mock
 
 from ostorlab.runtimes.local.models import models
 from agent import data_queues
@@ -35,6 +36,7 @@ def testTrackerAgentCheckQueueNotEmpty_whenQueueIsEmpty_returnFalse():
 
 
 @pytest.mark.asyncio
+@mock.patch('ostorlab.runtimes.local.models.models.ENGINE_URL', 'sqlite:////tmp/ostorlab_db1.sqlite')
 def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
         mocker,
         agent_mock,
