@@ -44,6 +44,7 @@ def fixture_tracker_agent():
         key='agent_tracker_key',
         bus_url='NA',
         bus_exchange_topic='NA',
+        bus_management_url='http://guest:guest@localhost:15672/',
         bus_vhost='/',
     )
 
