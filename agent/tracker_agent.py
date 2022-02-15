@@ -2,10 +2,12 @@
 import logging
 import multiprocessing
 import time
+import os
 
 from ostorlab.agent import agent
 from ostorlab.agent import definitions as agent_definitions
 from ostorlab.runtimes import definitions as runtime_definitions
+from ostorlab.runtimes.local.models import models
 
 from agent import data_queues
 from agent import universe
@@ -51,7 +53,7 @@ class TrackerAgent(agent.Agent):
             self.emit('v3.report.event.post_scan.timeout', {})
 
         self.emit('v3.report.event.post_scan.done', {})
-
+        self._set_scan_progress(models.ScanProgress.DONE)
         universe_id = self.universe
         universe.kill_universe(universe_id)
 
@@ -74,6 +76,17 @@ class TrackerAgent(agent.Agent):
             check_scan_process.kill()
             check_scan_process.join()
             raise TimeoutError()
+
+    def _set_scan_progress(self, progress: str):
+        """Persist the scan progress in the database
+        Args:
+            progress: scan progress to persist.
+         """
+        database = models.Database()
+        session = database.session
+        scan = session.query(models.Scan).get(os.getenv('UNIVERSE'))
+        scan.progress = progress
+        session.commit()
 
 
 if __name__ == '__main__':

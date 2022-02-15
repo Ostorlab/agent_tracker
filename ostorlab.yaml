@@ -9,6 +9,9 @@ out_selectors:
   - v3.report.event.scan.timeout
   - v3.report.event.post_scan.done
   - v3.report.event.post_scan.timeout
+mounts:
+  - '/var/run/docker.sock:/var/run/docker.sock'
+  - '$CONFIG_HOME/.ostorlab/db.sqlite:/root/.ostorlab/db.sqlite'
 args:
   - name: "init_sleep_seconds"
     type: "number"
