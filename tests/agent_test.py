@@ -1,6 +1,9 @@
 """Tests for the tracker agent."""
 import pytest
+import os
+from unittest import mock
 
+from ostorlab.runtimes.local.models import models
 from agent import data_queues
 
 
@@ -33,6 +36,7 @@ def testTrackerAgentCheckQueueNotEmpty_whenQueueIsEmpty_returnFalse():
 
 
 @pytest.mark.asyncio
+@mock.patch('ostorlab.runtimes.local.models.models.ENGINE_URL', 'sqlite:////tmp/ostorlab_db1.sqlite')
 def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
         mocker,
         agent_mock,
@@ -65,6 +69,7 @@ def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
     assert agent_mock[1].selector == 'v3.report.event.scan.done'
     assert agent_mock[2].selector == 'v3.report.event.post_scan.timeout'
     assert agent_mock[3].selector == 'v3.report.event.post_scan.done'
+    assert models.Database().session.query(models.Scan).get(os.getenv('UNIVERSE')).progress == models.ScanProgress.DONE
 
 
 @pytest.mark.asyncio
