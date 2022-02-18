@@ -1,6 +1,6 @@
 kind: Agent
 name: tracker
-version: 0.0.1
+version: 0.0.2
 description: Agent responsible for tracking a scan.
 in_selectors:
   - v3.healthcheck.ping
