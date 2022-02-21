@@ -1,7 +1,30 @@
 kind: Agent
 name: tracker
-version: 0.0.2
-description: Agent responsible for tracking a scan.
+version: 0.0.4
+image: images/logo.png
+description: |
+  This repository is an implementation of the default tracker agent. Tracker is a default agent needed to run a scan using the local runtime.
+
+  ## Usage
+
+  Agent Tracker can be installed directly from the ostorlab agent store or built from this repository.
+
+   ### Install directly from ostorlab agent store
+
+   ```shell
+   ostorlab agent install agent/ostorlab/tracker
+   ```
+  The agent will be automatically installed and updated by simply passing `--install` flag:
+
+  ```shell
+  ostorlab scan run --install --agents agent/ostorlab/tsunami ip 8.8.8.8
+  ```
+
+  ## License
+  [Apache](./LICENSE)
+
+license: Apache
+source: https://github.com/Ostorlab/agent_tracker
 in_selectors:
   - v3.healthcheck.ping
 out_selectors:
