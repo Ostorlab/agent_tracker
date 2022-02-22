@@ -30,7 +30,7 @@ Agent Tracker can be installed directly from the ostorlab agent store or built f
 The agent will be automatically installed and updated by simply passing `--install` flag:
 
 ```shell
-ostorlab scan run --install --agents agent/ostorlab/tsunami ip 8.8.8.8
+ostorlab scan run --install --agent agent/ostorlab/tsunami ip 8.8.8.8
 ```
 
 ## License
