@@ -13,7 +13,7 @@ _Tracker is responsible for tracking a scan, e.g. its status, data queues._
 ---
 
 <p align="center">
-<img src="" alt="agent_tracker" />
+<img src="https://raw.githubusercontent.com/Ostorlab/agent_tracker/main/images/logo.png" alt="agent_tracker" />
 </p>
 
 This repository is an implementation of the default tracker agent. Tracker is a default agent needed to run a scan using the local runtime.
