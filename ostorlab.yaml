@@ -49,3 +49,4 @@ args:
     value: 600 # 10 minutes
 docker_file_path : Dockerfile
 docker_build_root : .
+image: image/logo.png
