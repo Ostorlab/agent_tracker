@@ -2,11 +2,15 @@
 import time
 from typing import Dict, List, Optional
 from urllib import parse
+import logging
 
 from agent import request_sender
 
+
 SLEEP_SEC = 3
 MAX_COUNT = 5
+
+logger = logging.getLogger(__name__)
 
 
 def list_all_queues(path: str, vhost: Optional[str] = '/') -> List[Dict]:
@@ -23,10 +27,10 @@ def list_all_queues(path: str, vhost: Optional[str] = '/') -> List[Dict]:
     return queues
 
 
-def is_queue_not_empty(queue: str) -> bool:
+def is_queue_not_empty(queue: Dict) -> bool:
     """Check if a data queue is not empty.
     Agrs:
-        queue: Data queue name
+        queue: Data queue
     Returns:
         False if queue is empty, else True.
     """
@@ -40,10 +44,14 @@ def are_queues_empty(path: str, vhost: str) -> bool:
     Returns:
         False if at least one data queue is not empty, else True.
     """
+    logger.info('checking the data queues')
     queues = list_all_queues(path, vhost)
     for queue in queues:
         if is_queue_not_empty(queue):
+            logger.info('queue %s has %s messages and %s unacked messaged',
+                        queue.get('name'), queue.get('messages'), queue.get('messages_unacknowledged'))
             return False
+    logger.info('data queues are all empty')
     return True
 
 

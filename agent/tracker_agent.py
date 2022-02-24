@@ -8,10 +8,19 @@ from ostorlab.agent import agent
 from ostorlab.agent import definitions as agent_definitions
 from ostorlab.runtimes import definitions as runtime_definitions
 from ostorlab.runtimes.local.models import models
+from rich import logging as rich_logging
 
 from agent import data_queues
 from agent import universe
 
+
+logging.basicConfig(
+    format='%(message)s',
+    datefmt='[%X]',
+    handlers=[rich_logging.RichHandler(rich_tracebacks=True)],
+    level='INFO',
+    force=True
+)
 logger = logging.getLogger(__name__)
 
 
@@ -43,6 +52,7 @@ class TrackerAgent(agent.Agent):
             time.sleep(self.init_sleep_seconds)
             self.timeout_queues_checking(self.scan_done_timeout_sec)
         except TimeoutError:
+            logger.info('scan timeout after: %s s', str(self.scan_done_timeout_sec))
             self.emit('v3.report.event.scan.timeout', {})
 
         self.emit('v3.report.event.scan.done', {})
@@ -50,9 +60,11 @@ class TrackerAgent(agent.Agent):
         try:
             self.timeout_queues_checking(self.postscane_done_timeout_sec)
         except TimeoutError:
+            logger.info('post scan timeout after: %s', str(self.postscane_done_timeout_sec))
             self.emit('v3.report.event.post_scan.timeout', {})
 
         self.emit('v3.report.event.post_scan.done', {})
+        logger.info('updating scan status to done.')
         self._set_scan_progress(models.ScanProgress.DONE)
         universe_id = self.universe
         universe.kill_universe(universe_id)
@@ -90,5 +102,5 @@ class TrackerAgent(agent.Agent):
 
 
 if __name__ == '__main__':
-    logger.debug('Tracker agent starting..')
+    logger.info('starting agent..')
     TrackerAgent.main()

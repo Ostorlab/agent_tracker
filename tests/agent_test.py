@@ -51,12 +51,13 @@ def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
     So, it should timeout, emits a message : post_scan_done_timeout,
     and another message : post_scan_done.
     """
+    # breakpoint()
     path = 'http://guest:guest@localhost:15672/api/queues/%2F'
     requests_mock.get(
         path,
         json=[
-            {'messages': 42, 'messages_unacknowledged': 0},
-            {'messages': 0, 'messages_unacknowledged': 0}
+            {'name': 'queue1', 'messages': 42, 'messages_unacknowledged': 0},
+            {'name': 'queue2', 'messages': 0, 'messages_unacknowledged': 0}
         ]
     )
     mocker.patch('agent.tracker_agent.universe.kill_universe', return_value=None)
@@ -89,8 +90,8 @@ def testTrackerLogic_whenQueuesAreEmpty_send2messages(
     requests_mock.get(
         path,
         json=[
-            {'messages': 0, 'messages_unacknowledged': 0},
-            {'messages': 0, 'messages_unacknowledged': 0}
+            {'name': 'queue1', 'messages': 0, 'messages_unacknowledged': 0},
+            {'name': 'queue2', 'messages': 0, 'messages_unacknowledged': 0}
         ]
     )
 
