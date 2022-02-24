@@ -5,6 +5,7 @@ from typing import Dict, Optional
 
 import requests
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -23,10 +24,10 @@ def make_request(method: str, path: str, data: Optional[Dict[str, str]] = None):
     Raises:
         AuthenticationError if request is not successful.
     """
-    logger.info('Request %s %s %s', method, path, data)
+    logger.info('request %s %s %s', method, path, data)
     response = requests.request(method, path, data=json.dumps(data))
     if response.status_code not in [200, 201, 204]:
-        logger.error('Received %i %s', response.status_code, response.content)
+        logger.error('received %i %s', response.status_code, response.content)
         raise AuthenticationError(response.reason)
     elif response.status_code == 200:
         return response.json()
