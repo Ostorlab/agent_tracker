@@ -52,7 +52,7 @@ class TrackerAgent(agent.Agent):
             time.sleep(self.init_sleep_seconds)
             self.timeout_queues_checking(self.scan_done_timeout_sec)
         except TimeoutError:
-            logger.info('scan timeout after: %d s', str(self.scan_done_timeout_sec))
+            logger.info('scan timeout after: %s s', str(self.scan_done_timeout_sec))
             self.emit('v3.report.event.scan.timeout', {})
 
         self.emit('v3.report.event.scan.done', {})
@@ -60,7 +60,7 @@ class TrackerAgent(agent.Agent):
         try:
             self.timeout_queues_checking(self.postscane_done_timeout_sec)
         except TimeoutError:
-            logger.info('post scan timeout after: %d', str(self.postscane_done_timeout_sec))
+            logger.info('post scan timeout after: %s', str(self.postscane_done_timeout_sec))
             self.emit('v3.report.event.post_scan.timeout', {})
 
         self.emit('v3.report.event.post_scan.done', {})
