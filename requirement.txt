@@ -1,1 +1,3 @@
-ostorlab
+ostorlab[agent]
+requests
+rich
