@@ -1,5 +1,6 @@
 """Module responsible for sending HTTP requests"""
 import json
+import tenacity
 import logging
 from typing import Dict, Optional
 
@@ -12,7 +13,10 @@ logger = logging.getLogger(__name__)
 class AuthenticationError(Exception):
     """Authentication Error."""
 
-
+@tenacity.retry(
+    stop=tenacity.stop_after_attempt(5),
+    wait=tenacity.wait_fixed(2),
+    retry=tenacity.retry_if_exception_type())
 def make_request(method: str, path: str, data: Optional[Dict[str, str]] = None):
     """Sends an HTTP request.
     Args:
