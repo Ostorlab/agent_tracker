@@ -1,6 +1,6 @@
 kind: Agent
 name: tracker
-version: 0.0.9
+version: 0.1.0
 description: |
   This repository is an implementation of the default tracker agent. Tracker is a default agent needed to run a scan using the local runtime.
 
