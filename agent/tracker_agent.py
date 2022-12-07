@@ -15,11 +15,11 @@ from agent import universe
 
 
 logging.basicConfig(
-    format='%(message)s',
-    datefmt='[%X]',
+    format="%(message)s",
+    datefmt="[%X]",
     handlers=[rich_logging.RichHandler(rich_tracebacks=True)],
-    level='INFO',
-    force=True
+    level="INFO",
+    force=True,
 )
 logger = logging.getLogger(__name__)
 
@@ -27,44 +27,47 @@ logger = logging.getLogger(__name__)
 class TrackerAgent(agent.Agent):
     """Agent responsible for tracking a scan."""
 
-    def __init__(self,
-                 agent_definition: agent_definitions.AgentDefinition,
-                 agent_settings: runtime_definitions.AgentSettings
-                 ) -> None:
+    def __init__(
+        self,
+        agent_definition: agent_definitions.AgentDefinition,
+        agent_settings: runtime_definitions.AgentSettings,
+    ) -> None:
         """Inits the tracker agent."""
         super().__init__(agent_definition, agent_settings)
-        self.init_sleep_seconds = self.args.get('init_sleep_seconds')
-        self.scan_done_timeout_sec = self.args.get('scan_done_timeout_sec')
-        self.postscane_done_timeout_sec = self.args.get('postscane_done_timeout_sec')
+        self.init_sleep_seconds = self.args.get("init_sleep_seconds")
+        self.scan_done_timeout_sec = self.args.get("scan_done_timeout_sec")
+        self.postscane_done_timeout_sec = self.args.get("postscane_done_timeout_sec")
 
     def start(self) -> None:
         """Overriden method start responsible for :
-            Periodically checking the data queues state
-                In case checking exceeded the time limit, a scan-timeout message is sent.
-                A scan-done message is sent.
-            Since some other agents, might be waiting for the scan-done/timeout messages,
-            another periodic check is required.
-            This time, sending postscan-done/timeout messages.
-            Finally a clean-up is executed to stop all services belonging to the current universe.
+        Periodically checking the data queues state
+            In case checking exceeded the time limit, a scan-timeout message is sent.
+            A scan-done message is sent.
+        Since some other agents, might be waiting for the scan-done/timeout messages,
+        another periodic check is required.
+        This time, sending postscan-done/timeout messages.
+        Finally a clean-up is executed to stop all services belonging to the current universe.
         """
 
         try:
             time.sleep(self.init_sleep_seconds)
             self.timeout_queues_checking(self.scan_done_timeout_sec)
         except TimeoutError:
-            logger.info('scan timeout after: %s s', str(self.scan_done_timeout_sec))
-            self.emit('v3.report.event.scan.timeout', {})
+            logger.info("scan timeout after: %s s", str(self.scan_done_timeout_sec))
+            self.emit("v3.report.event.scan.timeout", {})
 
-        self.emit('v3.report.event.scan.done', {})
+        self.emit("v3.report.event.scan.done", {})
 
         try:
             self.timeout_queues_checking(self.postscane_done_timeout_sec)
         except TimeoutError:
-            logger.info('post scan timeout after: %s', str(self.postscane_done_timeout_sec))
-            self.emit('v3.report.event.post_scan.timeout', {})
+            logger.info(
+                "post scan timeout after: %s", str(self.postscane_done_timeout_sec)
+            )
+            self.emit("v3.report.event.post_scan.timeout", {})
 
-        self.emit('v3.report.event.post_scan.done', {})
-        logger.info('updating scan status to done.')
+        self.emit("v3.report.event.post_scan.done", {})
+        logger.info("updating scan status to done.")
         self._set_scan_progress(models.ScanProgress.DONE)
         universe_id = self.universe
         universe.kill_universe(universe_id)
@@ -79,7 +82,7 @@ class TrackerAgent(agent.Agent):
         """
         check_scan_process = multiprocessing.Process(
             target=data_queues.check_queues_periodically,
-            args=(self.bus_managment_url, self.bus_vhost)
+            args=(self.bus_managment_url, self.bus_vhost),
         )
         check_scan_process.start()
         check_scan_process.join(timeout)
@@ -93,14 +96,14 @@ class TrackerAgent(agent.Agent):
         """Persist the scan progress in the database
         Args:
             progress: scan progress to persist.
-         """
+        """
         database = models.Database()
         session = database.session
-        scan = session.query(models.Scan).get(os.getenv('UNIVERSE'))
+        scan = session.query(models.Scan).get(os.getenv("UNIVERSE"))
         scan.progress = progress
         session.commit()
 
 
-if __name__ == '__main__':
-    logger.info('starting agent..')
+if __name__ == "__main__":
+    logger.info("starting agent..")
     TrackerAgent.main()
