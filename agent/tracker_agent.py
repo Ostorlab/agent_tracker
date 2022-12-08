@@ -1,8 +1,8 @@
 """Tracker Agent : Agent responsible for tracking a scan, e.g., status, data queues."""
 import logging
 import multiprocessing
-import time
 import os
+import time
 
 from ostorlab.agent import agent
 from ostorlab.agent import definitions as agent_definitions
@@ -12,7 +12,6 @@ from rich import logging as rich_logging
 
 from agent import data_queues
 from agent import universe
-
 
 logging.basicConfig(
     format="%(message)s",
@@ -97,11 +96,10 @@ class TrackerAgent(agent.Agent):
         Args:
             progress: scan progress to persist.
         """
-        database = models.Database()
-        session = database.session
-        scan = session.query(models.Scan).get(os.getenv("UNIVERSE"))
-        scan.progress = progress
-        session.commit()
+        with models.Database() as session:
+            scan = session.query(models.Scan).get(os.getenv("UNIVERSE"))
+            scan.progress = progress
+            session.commit()
 
 
 if __name__ == "__main__":
