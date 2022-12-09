@@ -16,7 +16,8 @@ class AuthenticationError(Exception):
 @tenacity.retry(
     stop=tenacity.stop_after_attempt(5),
     wait=tenacity.wait_fixed(2),
-    retry=tenacity.retry_if_exception_type())
+    retry=tenacity.retry_if_exception_type(),
+)
 def make_request(method: str, path: str, data: Optional[Dict[str, str]] = None):
     """Sends an HTTP request.
     Args:
@@ -28,10 +29,10 @@ def make_request(method: str, path: str, data: Optional[Dict[str, str]] = None):
     Raises:
         AuthenticationError if request is not successful.
     """
-    logger.info('request %s %s %s', method, path, data)
+    logger.info("request %s %s %s", method, path, data)
     response = requests.request(method, path, data=json.dumps(data), timeout=10)
     if response.status_code not in [200, 201, 204]:
-        logger.error('received %i %s', response.status_code, response.content)
+        logger.error("received %i %s", response.status_code, response.content)
         raise AuthenticationError(response.reason)
     elif response.status_code == 200:
         return response.json()

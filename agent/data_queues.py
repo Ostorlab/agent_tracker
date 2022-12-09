@@ -13,7 +13,7 @@ MAX_COUNT = 5
 logger = logging.getLogger(__name__)
 
 
-def list_all_queues(path: str, vhost: Optional[str] = '/') -> List[Dict]:
+def list_all_queues(path: str, vhost: Optional[str] = "/") -> List[Dict]:
     """Send a request to RabbitMQ api to list all the data queues.
     Args:
         path: Path to the RabbitMQ management api to send the request to.
@@ -22,8 +22,8 @@ def list_all_queues(path: str, vhost: Optional[str] = '/') -> List[Dict]:
         List of all the data queues.
     """
     quoted_vhost = parse.quote_plus(vhost)
-    queues_path = path + f'api/queues/{quoted_vhost}'
-    queues = request_sender.make_request('GET', queues_path)
+    queues_path = path + f"api/queues/{quoted_vhost}"
+    queues = request_sender.make_request("GET", queues_path)
     return queues
 
 
@@ -34,7 +34,7 @@ def is_queue_not_empty(queue: Dict) -> bool:
     Returns:
         False if queue is empty, else True.
     """
-    return queue['messages'] > 0 or queue['messages_unacknowledged'] > 0
+    return queue["messages"] > 0 or queue["messages_unacknowledged"] > 0
 
 
 def are_queues_empty(path: str, vhost: str) -> bool:
@@ -44,14 +44,18 @@ def are_queues_empty(path: str, vhost: str) -> bool:
     Returns:
         False if at least one data queue is not empty, else True.
     """
-    logger.info('checking the data queues')
+    logger.info("checking the data queues")
     queues = list_all_queues(path, vhost)
     for queue in queues:
         if is_queue_not_empty(queue):
-            logger.info('queue %s has %s messages and %s unacked messaged',
-                        queue.get('name'), queue.get('messages'), queue.get('messages_unacknowledged'))
+            logger.info(
+                "queue %s has %s messages and %s unacked messaged",
+                queue.get("name"),
+                queue.get("messages"),
+                queue.get("messages_unacknowledged"),
+            )
             return False
-    logger.info('data queues are all empty')
+    logger.info("data queues are all empty")
     return True
 
 
