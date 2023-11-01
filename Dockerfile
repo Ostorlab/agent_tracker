@@ -1,4 +1,4 @@
-FROM python:3.10-alpine as base
+FROM python:3.11-alpine as base
 FROM base as builder
 RUN apk add build-base
 RUN apk update
@@ -13,4 +13,4 @@ COPY agent /app/agent
 COPY ostorlab.yaml /app/agent/ostorlab.yaml
 WORKDIR /app
 ENV PYTHONPATH=/app
-CMD ["python3", "/app/agent/tracker_agent.py"]
+CMD ["python3.11", "/app/agent/tracker_agent.py"]
