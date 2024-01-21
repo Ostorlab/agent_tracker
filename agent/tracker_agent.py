@@ -98,8 +98,11 @@ class TrackerAgent(agent.Agent):
         """
         with models.Database() as session:
             scan = session.query(models.Scan).get(os.getenv("UNIVERSE"))
-            scan.progress = progress
-            session.commit()
+            if scan is not None:
+                scan.progress = progress
+                session.commit()
+            else:
+                logger.error("Scan for %s does not exist.", os.getenv("UNIVERSE"))
 
 
 if __name__ == "__main__":

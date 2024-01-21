@@ -2,7 +2,6 @@
 import os
 from unittest import mock
 
-import pytest
 from ostorlab.runtimes.local.models import models
 
 from agent import data_queues
@@ -36,7 +35,6 @@ def testTrackerAgentCheckQueueNotEmpty_whenQueueIsEmpty_returnFalse():
     assert data_queues.is_queue_not_empty(dummy_queue) is False
 
 
-@pytest.mark.asyncio
 @mock.patch(
     "ostorlab.runtimes.local.models.models.ENGINE_URL",
     "sqlite:////tmp/ostorlab_db1.sqlite",
@@ -53,7 +51,6 @@ def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
     So, it should timeout, emits a message : post_scan_done_timeout,
     and another message : post_scan_done.
     """
-    # breakpoint()
     path = "http://guest:guest@localhost:15672/api/queues/%2F"
     requests_mock.get(
         path,
@@ -65,7 +62,7 @@ def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
     mocker.patch("agent.tracker_agent.universe.kill_universe", return_value=None)
     mocker.patch.object(data_queues, "SLEEP_SEC", 0.01)
 
-    tracker_agent.run()
+    tracker_agent.start()
 
     assert len(agent_mock) == 4
     assert agent_mock[0].selector == "v3.report.event.scan.timeout"
@@ -79,7 +76,6 @@ def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
         )
 
 
-@pytest.mark.asyncio
 def testTrackerLogic_whenQueuesAreEmpty_send2messages(
     mocker, agent_mock, tracker_agent, requests_mock
 ):
@@ -99,7 +95,7 @@ def testTrackerLogic_whenQueuesAreEmpty_send2messages(
         ],
     )
 
-    tracker_agent.run()
+    tracker_agent.start()
 
     assert len(agent_mock) == 2
     assert agent_mock[0].selector == "v3.report.event.scan.done"
