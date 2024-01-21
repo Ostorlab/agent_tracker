@@ -2,7 +2,6 @@
 import os
 from unittest import mock
 
-import pytest
 from ostorlab.runtimes.local.models import models
 
 from agent import data_queues
