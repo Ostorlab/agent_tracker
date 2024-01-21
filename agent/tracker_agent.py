@@ -102,7 +102,7 @@ class TrackerAgent(agent.Agent):
                 scan.progress = progress
                 session.commit()
             else:
-                logger.error(f"Scan for {os.getenv('UNIVERSE')} does not exist.")
+                logger.error("Scan for %s does not exist.", os.getenv("UNIVERSE"))
 
 
 if __name__ == "__main__":
