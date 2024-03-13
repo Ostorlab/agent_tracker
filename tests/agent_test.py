@@ -1,4 +1,5 @@
 """Tests for the tracker agent."""
+
 import os
 from unittest import mock
 
