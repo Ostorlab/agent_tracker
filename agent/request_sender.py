@@ -1,4 +1,5 @@
 """Module responsible for sending HTTP requests"""
+
 import json
 import logging
 from typing import Dict, Optional

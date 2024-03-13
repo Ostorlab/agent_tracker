@@ -1,4 +1,5 @@
 """Module responsible for handling the data queues, listing them & checking their states."""
+
 import time
 from typing import Dict, List, Optional
 from urllib import parse

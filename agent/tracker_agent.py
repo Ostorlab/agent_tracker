@@ -1,4 +1,5 @@
 """Tracker Agent : Agent responsible for tracking a scan, e.g., status, data queues."""
+
 import logging
 import multiprocessing
 import os
