@@ -33,7 +33,7 @@ out_selectors:
   - v3.report.event.post_scan.timeout
 supported_architectures:
   - linux/arm64/v8
-  - linux/amd64
+  - linux/x86_64
 mounts:
   - '/var/run/docker.sock:/var/run/docker.sock'
   - '$CONFIG_HOME/db.sqlite:/root/.ostorlab/db.sqlite'
