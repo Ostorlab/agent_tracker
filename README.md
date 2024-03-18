@@ -20,17 +20,17 @@ This repository is an implementation of the default tracker agent. Tracker is a 
 
 ## Usage
 
-Agent Tracker can be installed directly from the ostorlab agent store or built from this repository.
+Agent Tracker can be installed directly from the oxo agent store or built from this repository.
 
- ### Install directly from ostorlab agent store
+ ### Install directly from oxo agent store
 
  ```shell
- ostorlab agent install agent/ostorlab/tracker
+ oxo agent install agent/ostorlab/tracker
  ```
 The agent will be automatically installed and updated by simply passing `--install` flag:
 
 ```shell
-ostorlab scan run --install --agent agent/ostorlab/tsunami ip 8.8.8.8
+oxo scan run --install --agent agent/ostorlab/tsunami ip 8.8.8.8
 ```
 
 ## License
