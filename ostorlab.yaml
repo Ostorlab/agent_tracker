@@ -41,7 +41,7 @@ args:
   - name: "init_sleep_seconds"
     type: "number"
     description: "time to wait before checking the queues."
-    value: 30  # 30 seconds
+    value: 60  # 60 seconds
   - name: "scan_done_timeout_sec"
     type: "number"
     description: "time to wait before terminating the scan."
