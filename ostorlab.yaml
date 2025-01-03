@@ -1,6 +1,6 @@
 kind: Agent
 name: tracker
-version: 0.1.8
+version: 0.1.9
 description: |
   This repository is an implementation of the default tracker agent. Tracker is a default agent needed to run a scan using the local runtime.
 
@@ -45,7 +45,7 @@ args:
   - name: "scan_done_timeout_sec"
     type: "number"
     description: "time to wait before terminating the scan."
-    value: 14400  # 4 hours
+    value: 172800  # 48 hours
   - name: "postscane_done_timeout_sec"
     type: "number"
     description: "time to wait before terminating the post process scan."
