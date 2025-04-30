@@ -1,4 +1,4 @@
-ostorlab[agent]
+ostorlab[agent]==0.18.0
 requests
 rich
 tenacity

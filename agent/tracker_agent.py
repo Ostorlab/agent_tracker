@@ -56,7 +56,10 @@ class TrackerAgent(agent.Agent):
             logger.info("scan timeout after: %s s", str(self.scan_done_timeout_sec))
             self.emit("v3.report.event.scan.timeout", {})
 
+        logger.info("emitting scan done event. after 2 mins")
+        time.sleep(120)
         self.emit("v3.report.event.scan.done", {})
+        logger.info("scan done message emitted")
 
         try:
             self.timeout_queues_checking(self.postscane_done_timeout_sec)
@@ -68,6 +71,7 @@ class TrackerAgent(agent.Agent):
 
         self.emit("v3.report.event.post_scan.done", {})
         logger.info("updating scan status to done.")
+        time.sleep(60*60)  # wait for 1 hour before killing the universe
         self._set_scan_progress(models.ScanProgress.DONE)
         universe_id = self.universe
         universe.kill_universe(universe_id)

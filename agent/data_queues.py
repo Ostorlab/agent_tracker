@@ -35,6 +35,10 @@ def is_queue_not_empty(queue: Dict) -> bool:
     Returns:
         False if queue is empty, else True.
     """
+    if queue.get("name") == "local_persist_vulnz_queue":
+        logger.info("persist_vulnz messages: %s", queue.get("messages"))
+        logger.info("persist_vulnz unacked messages: %s", queue.get("messages_unacknowledged"))
+        logger.info("persist_vulnz messages: %s", queue.get("messages_unacked"))
     return queue["messages"] > 0 or queue["messages_unacknowledged"] > 0
 
 
@@ -73,9 +77,11 @@ def confirm_queues_are_empty(path: str, vhost: str, max_count: int) -> bool:
     """
     counter = 0
     while counter < max_count:
+        logger.info("Attempt %s to check the data queues", counter)
         counter += 1
         if not are_queues_empty(path, vhost):
             return False
+        time.sleep(3)
     return True
 
 
