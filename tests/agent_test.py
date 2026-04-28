@@ -41,7 +41,7 @@ def testTrackerAgentCheckQueueNotEmpty_whenQueueIsEmpty_returnFalse():
     "sqlite:////tmp/ostorlab_db1.sqlite",
 )
 def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
-    mocker, agent_mock, tracker_agent, requests_mock
+    mocker, agent_mock, tracker_agent
 ):
     """Test for the life cycle of the agent tracker.
     Case : The data queues start full.
@@ -52,10 +52,9 @@ def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
     So, it should timeout, emits a message : post_scan_done_timeout,
     and another message : post_scan_done.
     """
-    path = "http://guest:guest@localhost:15672/api/queues/%2F"
-    requests_mock.get(
-        path,
-        json=[
+    mocker.patch(
+        "agent.request_sender.make_request",
+        return_value=[
             {"name": "queue1", "messages": 42, "messages_unacknowledged": 0},
             {"name": "queue2", "messages": 0, "messages_unacknowledged": 0},
         ],
@@ -78,7 +77,7 @@ def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
 
 
 def testTrackerLogic_whenQueuesAreEmpty_send2messages(
-    mocker, agent_mock, tracker_agent, requests_mock
+    mocker, agent_mock, tracker_agent
 ):
     """Test for the life cycle of the agent tracker.
     Case : The data queues start empty.
@@ -87,10 +86,9 @@ def testTrackerLogic_whenQueuesAreEmpty_send2messages(
     So, it should automatically emit a message : post_scan_done.
     """
     mocker.patch("agent.tracker_agent.universe.kill_universe", return_value=None)
-    path = "http://guest:guest@localhost:15672/api/queues/%2F"
-    requests_mock.get(
-        path,
-        json=[
+    mocker.patch(
+        "agent.request_sender.make_request",
+        return_value=[
             {"name": "queue1", "messages": 0, "messages_unacknowledged": 0},
             {"name": "queue2", "messages": 0, "messages_unacknowledged": 0},
         ],
