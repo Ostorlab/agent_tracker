@@ -52,15 +52,11 @@ def testTrackerAgentLogic_whenQueuesAreNotEmpty_killProcessesAndSend4Messages(
     So, it should timeout, emits a message : post_scan_done_timeout,
     and another message : post_scan_done.
     """
-    mocker.patch(
-        "agent.request_sender.make_request",
-        return_value=[
-            {"name": "queue1", "messages": 42, "messages_unacknowledged": 0},
-            {"name": "queue2", "messages": 0, "messages_unacknowledged": 0},
-        ],
-    )
     mocker.patch("agent.tracker_agent.universe.kill_universe", return_value=None)
-    mocker.patch.object(data_queues, "SLEEP_SEC", 0.01)
+
+    mock_process = mocker.MagicMock()
+    mock_process.is_alive.return_value = True
+    mocker.patch("multiprocessing.Process", return_value=mock_process)
 
     tracker_agent.start()
 
@@ -86,13 +82,10 @@ def testTrackerLogic_whenQueuesAreEmpty_send2messages(
     So, it should automatically emit a message : post_scan_done.
     """
     mocker.patch("agent.tracker_agent.universe.kill_universe", return_value=None)
-    mocker.patch(
-        "agent.request_sender.make_request",
-        return_value=[
-            {"name": "queue1", "messages": 0, "messages_unacknowledged": 0},
-            {"name": "queue2", "messages": 0, "messages_unacknowledged": 0},
-        ],
-    )
+
+    mock_process = mocker.MagicMock()
+    mock_process.is_alive.return_value = False
+    mocker.patch("multiprocessing.Process", return_value=mock_process)
 
     tracker_agent.start()
 
