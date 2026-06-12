@@ -45,7 +45,7 @@ args:
   - name: "scan_done_timeout_sec"
     type: "number"
     description: "time to wait before terminating the scan."
-    value: 172800  # 48 hours
+    value: 432000  # 5 days
   - name: "postscane_done_timeout_sec"
     type: "number"
     description: "time to wait before terminating the post process scan."
