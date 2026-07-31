@@ -11,8 +11,7 @@ from ostorlab.runtimes import definitions as runtime_definitions
 from ostorlab.runtimes.local.models import models
 from rich import logging as rich_logging
 
-from agent import data_queues
-from agent import universe
+from agent import data_queues, universe
 
 logging.basicConfig(
     format="%(message)s",

@@ -1,12 +1,10 @@
 """Module responsible for handling the data queues, listing them & checking their states."""
 
-import time
-from typing import Dict, List, Optional
-from urllib import parse
 import logging
+import time
+from urllib import parse
 
 from agent import request_sender
-
 
 SLEEP_SEC = 3
 MAX_COUNT = 5
@@ -14,7 +12,7 @@ MAX_COUNT = 5
 logger = logging.getLogger(__name__)
 
 
-def list_all_queues(path: str, vhost: Optional[str] = "/") -> List[Dict]:
+def list_all_queues(path: str, vhost: str | None = "/") -> list[dict]:
     """Send a request to RabbitMQ api to list all the data queues.
     Args:
         path: Path to the RabbitMQ management api to send the request to.
@@ -28,7 +26,7 @@ def list_all_queues(path: str, vhost: Optional[str] = "/") -> List[Dict]:
     return queues
 
 
-def is_queue_not_empty(queue: Dict) -> bool:
+def is_queue_not_empty(queue: dict) -> bool:
     """Check if a data queue is not empty.
     Agrs:
         queue: Data queue
