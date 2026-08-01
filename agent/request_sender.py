@@ -2,7 +2,6 @@
 
 import json
 import logging
-from typing import Dict, Optional
 
 import requests
 import tenacity
@@ -19,7 +18,7 @@ class AuthenticationError(Exception):
     wait=tenacity.wait_fixed(2),
     retry=tenacity.retry_if_exception_type(),
 )
-def make_request(method: str, path: str, data: Optional[Dict[str, str]] = None):
+def make_request(method: str, path: str, data: dict[str, str] | None = None):
     """Sends an HTTP request.
     Args:
         method: One of HTTP requests, e.g., GET, POST.

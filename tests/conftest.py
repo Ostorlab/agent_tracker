@@ -1,9 +1,9 @@
 """Pytest fixture for the tracker agent."""
 
-import pytest
 import os
 from unittest import mock
 
+import pytest
 from ostorlab.agent import definitions as agent_definitions
 from ostorlab.runtimes import definitions as runtime_definitions
 from ostorlab.runtimes.local.models import models
